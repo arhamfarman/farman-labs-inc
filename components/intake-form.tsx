@@ -1,5 +1,5 @@
 "use client";
-import { useActionState } from "react";
+import { useActionState, useEffect, useState } from "react";
 import Script from "next/script";
 import { submitLead } from "@/app/contact/actions";
 import {
@@ -47,6 +47,9 @@ function Select({ id, options, value, error, required }: {
 
 export function IntakeForm({ initialServices = [], initialEmail }: { initialServices?: string[]; initialEmail?: string }) {
   const [state, action, pending] = useActionState<LeadState, FormData>(submitLead, { status: "idle" });
+  // A submit before hydration posts as a plain HTML form and the visitor sees no result, so wait until React is ready.
+  const [ready, setReady] = useState(false);
+  useEffect(() => setReady(true), []);
   const siteKey = process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY;
 
   if (state.status === "success") {
@@ -138,7 +141,7 @@ export function IntakeForm({ initialServices = [], initialEmail }: { initialServ
       )}
 
       <div>
-        <Button type="submit" size="lg" disabled={pending}>{pending ? "Sending…" : "Send project brief"}</Button>
+        <Button type="submit" size="lg" disabled={pending || !ready}>{pending ? "Sending…" : "Send project brief"}</Button>
       </div>
     </form>
   );
