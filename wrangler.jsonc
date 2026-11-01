@@ -16,6 +16,13 @@
       "service": "farman-labs-inc"
     }
   ],
+  "workers_dev": true,
+  "preview_urls": true,
+  // Wrangler creates the DNS records and certificates for these on deploy
+  "routes": [
+    { "pattern": "farmanlabs.com", "custom_domain": true },
+    { "pattern": "www.farmanlabs.com", "custom_domain": true }
+  ],
   "observability": {
     "enabled": true
   }
