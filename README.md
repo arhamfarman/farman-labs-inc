@@ -26,4 +26,3 @@ npm run check:brand  # fails on white-on-orange or any blue class
 - Replace the demo case study with real ones, and the portrait placeholders with a photo at `public/brand/arham.jpg`.
 - Copy marked "Draft" in the code (heritage story, founder bio, FAQ answers) needs Arham's sign-off, as do the open items in the spec.
 - Swap `public/brand/logo.png` for an SVG once the vector logo is exported.
-# farman-labs-inc

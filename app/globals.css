@@ -1,0 +1,29 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer components {
+  .surface-navy { @apply bg-navy bg-navy-grid bg-grid text-mist; }
+  .path-line { @apply font-mono text-label lowercase text-orange [overflow-wrap:anywhere]; }
+  /* orange text fails contrast on white, so light surfaces use the text-safe shade */
+  .surface-light .path-line { @apply text-orange-ink; }
+  .h-display { @apply text-h1 uppercase max-md:text-[2.5rem]; }
+  .h-display .line-2 { @apply block text-orange; }
+  .surface-light .h-display .line-2 { @apply text-orange-ink; }
+  .h-section { @apply text-h2 uppercase max-md:text-[2rem]; }
+  .h-section .line-2 { @apply block text-orange; }
+  .surface-light .h-section .line-2 { @apply text-orange-ink; }
+  .text-link { @apply inline-flex items-center gap-1 font-bold text-orange hover:underline; }
+  .surface-light .text-link { @apply text-orange-ink; }
+  .text-link .arrow { @apply transition-transform; }
+  .text-link:hover .arrow { @apply translate-x-0.5; }
+}
+
+html { scroll-behavior: smooth; scroll-padding-top: 88px; }
+
+:focus-visible { outline: 2px solid #F58634; outline-offset: 2px; }
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after { animation: none !important; transition: none !important; }
+}
