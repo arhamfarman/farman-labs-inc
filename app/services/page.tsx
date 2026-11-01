@@ -8,6 +8,7 @@ import { DashboardMock } from "@/components/dashboard-mock";
 import { CodeMock, PipelineMock, PortalMock } from "@/components/mocks";
 import { ArchitectureDiagram } from "@/components/architecture-diagram";
 import { ArchStrip } from "@/components/arch-strip";
+import { CompareBars, IconTile, MetricCard, Pipeline } from "@/components/visuals";
 import { ClosingBand } from "@/components/closing-band";
 import { services } from "@/lib/services";
 import { modelRules, steps } from "@/lib/site";
@@ -18,7 +19,23 @@ export const metadata: Metadata = {
 };
 
 const square = { orange: "bg-orange", purple: "bg-purple", green: "bg-green", navy: "bg-navy" } as const;
-const iconColor = { orange: "text-orange", purple: "text-purple", green: "text-green-ink", navy: "text-navy" } as const;
+
+function ServiceTiles() {
+  return (
+    <nav aria-label="Jump to a service" className="grid grid-cols-2 gap-px overflow-hidden rounded-cell border border-navy-cell bg-navy-cell">
+      {services.map((s) => (
+        <a key={s.key} href={`#${s.key}`} className="group flex flex-col gap-4 bg-navy p-5 transition hover:bg-navy-grid">
+          <IconTile icon={s.icon} color={s.tile} marker={s.accent === "navy" ? undefined : s.accent} tone="dark" />
+          <span className="font-bold text-white">{s.short}</span>
+          <span className="flex flex-col gap-0.5">
+            <span className="font-mono text-label uppercase text-slate">{s.outcomes[0].metric}</span>
+            <span className="text-[15px] font-semibold text-mist">{s.outcomes[0].target}</span>
+          </span>
+        </a>
+      ))}
+    </nav>
+  );
+}
 
 export default function ServicesPage() {
   return (
@@ -28,6 +45,7 @@ export default function ServicesPage() {
         line1="Four systems."
         line2="One operation."
         lead="Start with the one that hurts most. They connect when you're ready."
+        media={<ServiceTiles />}
       />
 
       <nav aria-label="Services" className="sticky top-16 z-40 border-b border-hairline bg-white/95 backdrop-blur md:top-[72px]">
@@ -45,45 +63,49 @@ export default function ServicesPage() {
 
       {services.map((s, i) => (
         <Section key={s.key} id={s.key} surface={i % 2 === 0 ? "white" : "paper"}>
-          <div className="flex flex-col gap-4">
-            <p className="path-line">{s.path}</p>
-            <h2 className="flex items-center gap-4 text-h2 uppercase max-md:text-[2rem]">
-              <span aria-hidden className={`h-4 w-4 shrink-0 ${square[s.accent]}`} />
-              {s.name}
-            </h2>
-            <p className="max-w-[64ch] text-lead text-steel">{s.summary}</p>
-          </div>
-
-          <div className="mt-12 grid grid-cols-1 items-center gap-10 md:grid-cols-12">
-            <div className="md:col-span-6">
-              <h3 className="mb-4 font-mono text-label uppercase text-steel">What&rsquo;s slowing you down</h3>
-              <SquareList items={s.pains} />
+          <div className="grid grid-cols-1 items-center gap-10 lg:grid-cols-12">
+            <div className="flex flex-col gap-5 lg:col-span-5">
+              <p className="path-line">{s.path}</p>
+              <IconTile icon={s.icon} color={s.tile} marker={s.accent === "navy" ? undefined : s.accent} />
+              <h2 className="text-[2rem] font-extrabold uppercase leading-[1.05] max-md:text-[1.75rem]">{s.name}</h2>
+              <p className="text-lead text-steel">{s.promise}</p>
+              <div>
+                <h3 className="mb-3 font-mono text-label uppercase text-steel">Before</h3>
+                <SquareList items={s.pains.slice(0, 3)} className="text-[15px] text-steel" />
+              </div>
             </div>
-            <div className="md:col-span-6">
+            <div className="lg:col-span-7">
               <BrowserFrame url={`${s.key}.farmanlabs.app`}>
                 {s.key === "portals" ? <PortalMock /> : s.key === "automation" ? <PipelineMock /> : s.key === "custom" ? <CodeMock /> : <DashboardMock />}
-                <figcaption className="sr-only">Illustration of a {s.short.toLowerCase()} screen</figcaption>
+                <figcaption className="sr-only">Illustration of a {s.short.toLowerCase()} screen. {s.summary}</figcaption>
               </BrowserFrame>
             </div>
           </div>
 
+          <h3 className="mb-4 mt-16 font-mono text-label uppercase text-steel">How it flows</h3>
+          <Pipeline stages={s.flow} label={`How ${s.short.toLowerCase()} work, step by step`} />
+
           <h3 className="mb-4 mt-16 font-mono text-label uppercase text-steel">What we build</h3>
           <ul className="grid grid-cols-1 gap-px overflow-hidden rounded-cell border border-hairline bg-hairline sm:grid-cols-2 lg:grid-cols-3">
-            {s.features.map((f) => (
-              <li key={f.name} className="flex flex-col gap-3 bg-white p-6">
-                <f.icon aria-hidden size={24} strokeWidth={1.75} className={iconColor[s.accent]} />
-                <p className="font-bold">{f.name}</p>
-                <p className="text-[15px] text-steel">{f.detail}</p>
+            {s.features.map((f, n) => (
+              <li key={f.name} className="flex gap-4 bg-white p-5">
+                <IconTile icon={f.icon} color={n % 2 === 0 ? "orange" : "purple"} size="sm" />
+                <div className="flex flex-col gap-1">
+                  <p className="font-bold">{f.name}</p>
+                  <p className="text-[14px] text-steel">{f.detail}</p>
+                </div>
               </li>
             ))}
           </ul>
 
-          <h3 className="mb-4 mt-16 font-mono text-label uppercase text-steel">What changes</h3>
-          <LabelledCellGroup columns={4}>
-            {s.outcomes.map((o) => (
-              <LabelledCell key={o.metric} label={o.metric} value={o.target} accent={s.accent} />
+          <h3 className="mb-4 mt-16 font-mono text-label uppercase text-steel">What changes · targets</h3>
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+            {s.outcomes.map((o, n) => (
+              <MetricCard key={o.metric} label={o.metric} value={o.target} color={(["navy", "orange", "purple", "green"] as const)[n % 4]}>
+                {o.level !== undefined && <CompareBars level={o.level} color={(["navy", "orange", "purple", "green"] as const)[n % 4]} />}
+              </MetricCard>
             ))}
-          </LabelledCellGroup>
+          </div>
           <p className="mt-3 text-[14px] text-steel">Targets we measure against your baseline in every engagement, not past results.</p>
 
           <div className="mt-12 flex flex-col items-start justify-between gap-8 md:flex-row md:items-end">

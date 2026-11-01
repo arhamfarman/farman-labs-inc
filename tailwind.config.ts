@@ -42,10 +42,12 @@ export default {
       keyframes: {
         "fade-up": { from: { opacity: "0", transform: "translateY(12px)" }, to: { opacity: "1", transform: "none" } },
         "rail-draw": { from: { transform: "scaleY(0)" }, to: { transform: "scaleY(1)" } },
+        dash: { to: { strokeDashoffset: "-16" } },
       },
       animation: {
         "fade-up": "fade-up 500ms ease-out both",
         "rail-draw": "rail-draw 400ms ease-out both",
+        dash: "dash 1.2s linear infinite",
       },
     },
   },

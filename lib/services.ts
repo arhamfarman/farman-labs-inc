@@ -1,9 +1,10 @@
 import type { LucideIcon } from "lucide-react";
 import {
   Bell, Boxes, Calculator, CalendarClock, ClipboardList, Code2, Layers, Plug, Database, FileCheck2, FileText, Gauge, KanbanSquare, Link2, ListChecks,
-  Mail, MapPinned, RefreshCw, Settings2, ShieldCheck, Timer, UserCheck, Zap,
+  LayoutDashboard, Mail, MapPinned, MonitorSmartphone, PanelsTopLeft, RefreshCw, ScanText, Settings2, ShieldCheck, Timer, UserCheck, Workflow, Zap,
 } from "lucide-react";
 import type { Accent } from "@/components/labelled-cell";
+import type { Series } from "@/components/visuals";
 
 export type ServiceKey = "portals" | "automation" | "dashboards" | "custom";
 
@@ -13,12 +14,16 @@ export type Service = {
   name: string;
   short: string;
   path: string;
+  icon: LucideIcon;
+  tile: "orange" | "purple"; // icon colour on its tile; service icons alternate orange and purple
   summary: string;
   promise: string;
   bullets: string[];
   pains: string[];
   features: { name: string; detail: string; icon: LucideIcon }[];
-  outcomes: { metric: string; target: string }[];
+  flow: { name: string; label: string; icon: LucideIcon; color: Series }[];
+  // level: the target as a percentage of today's baseline, drawn as a bar; only for reductions
+  outcomes: { metric: string; target: string; level?: number }[];
 };
 
 // Content from Section 1 of the spec. Outcome figures are targets to measure per engagement, not claims.
@@ -29,6 +34,8 @@ export const services: Service[] = [
     name: "Client & Supplier Portals",
     short: "Portals",
     path: "// farman-labs / services / portals",
+    icon: PanelsTopLeft,
+    tile: "orange",
     summary:
       "A branded, secure web portal where customers place and track orders and suppliers confirm and update them, so your team stops re-typing emails into spreadsheets.",
     promise: "Customers order and track online. Your team stops re-typing.",
@@ -47,10 +54,16 @@ export const services: Service[] = [
       { name: "Automated notifications", icon: Bell, detail: "Email and SMS at each status change, proof-approval links and delivery confirmation, with no staff action needed." },
       { name: "Supplier side and accounts", icon: ShieldCheck, detail: "Purchase orders pushed to suppliers. Company accounts with roles, row-level security and SSO-ready sign-in." },
     ],
+    flow: [
+      { name: "Customer orders", label: "Guided form", icon: ClipboardList, color: "orange" },
+      { name: "File preflight", label: "Size · bleed · CMYK · dpi", icon: FileCheck2, color: "purple" },
+      { name: "Job record", label: "Written once", icon: Database, color: "green" },
+      { name: "Live status", label: "Email + SMS each step", icon: Bell, color: "navy" },
+    ],
     outcomes: [
-      { metric: "Staff time on order entry", target: "Cut by 60–80%" },
-      { metric: "Orders with missing or wrong specs", target: "Cut by over half" },
-      { metric: "“Where is my order?” calls", target: "Cut by over half" },
+      { metric: "Staff time on order entry", target: "Cut by 60–80%", level: 30 },
+      { metric: "Orders with missing or wrong specs", target: "Cut by over half", level: 45 },
+      { metric: "“Where is my order?” calls", target: "Cut by over half", level: 45 },
       { metric: "Order to production-ready", target: "Same day" },
     ],
   },
@@ -60,6 +73,8 @@ export const services: Service[] = [
     name: "Workflow Automation Pipelines",
     short: "Automation",
     path: "// farman-labs / services / automation",
+    icon: Workflow,
+    tile: "purple",
     summary:
       "Background systems that read the documents and emails your business already receives, pull out the data and put it where it belongs, with no copy-paste.",
     promise: "Invoices and emails become data automatically.",
@@ -78,6 +93,12 @@ export const services: Service[] = [
       { name: "Background jobs", icon: Zap, detail: "Scheduled and event-driven jobs with retries, step-level logs and alerts on failure." },
       { name: "Review and audit trail", icon: UserCheck, detail: "An approval screen for exceptions, and every automated action logged with its source document." },
     ],
+    flow: [
+      { name: "Email or PDF arrives", label: "Dedicated inbox", icon: Mail, color: "orange" },
+      { name: "Parser reads it", label: "Fields + confidence", icon: ScanText, color: "purple" },
+      { name: "Review if unsure", label: "Below 90% only", icon: UserCheck, color: "green" },
+      { name: "Posted to the books", label: "QuickBooks / ERP", icon: Link2, color: "navy" },
+    ],
     outcomes: [
       { metric: "Manual data entry", target: "10–30 hours a week saved" },
       { metric: "Data-entry error rate", target: "Under 1% after review" },
@@ -91,6 +112,8 @@ export const services: Service[] = [
     name: "Real-Time ERP & Operations Dashboards",
     short: "Dashboards",
     path: "// farman-labs / services / dashboards",
+    icon: LayoutDashboard,
+    tile: "orange",
     summary:
       "One live screen showing every job, crew and asset, updated the moment something changes, built around how your business actually runs instead of a generic ERP's idea of it.",
     promise: "Every job, crew and asset on one live screen.",
@@ -110,11 +133,17 @@ export const services: Service[] = [
       { name: "KPI dashboards", icon: Gauge, detail: "Throughput, on-time rate, backlog, revenue by customer and crew utilisation." },
       { name: "Alerts", icon: ListChecks, detail: "Rules such as “job late by 1 day” or “stock below reorder point” trigger email, SMS or Slack messages." },
     ],
+    flow: [
+      { name: "Floor updates a job", label: "Drag a card · scan", icon: KanbanSquare, color: "orange" },
+      { name: "Saved once", label: "Shared database", icon: Database, color: "purple" },
+      { name: "Every screen updates", label: "No refresh", icon: MonitorSmartphone, color: "green" },
+      { name: "Alerts fire", label: "Late job · low stock", icon: Bell, color: "navy" },
+    ],
     outcomes: [
       { metric: "Owner's status picture", target: "Seconds, any device" },
       { metric: "On-time delivery rate", target: "Up vs. baseline" },
-      { metric: "Status meetings and calls", target: "Cut by over half" },
-      { metric: "Stockouts and lost equipment", target: "Cut by over half" },
+      { metric: "Status meetings and calls", target: "Cut by over half", level: 45 },
+      { metric: "Stockouts and lost equipment", target: "Cut by over half", level: 45 },
     ],
   },
 ];
@@ -125,6 +154,8 @@ services.push({
   name: "Custom Software Development",
   short: "Custom software",
   path: "// farman-labs / services / custom",
+  icon: Code2,
+  tile: "purple",
   summary:
     "Full-stack software engineered around one operation's unusual work: quoting engines, scheduling tools, scanners and internal apps that no off-the-shelf product handles.",
   promise: "The system your operation needs, when no product fits.",
@@ -142,6 +173,12 @@ services.push({
     { name: "Integrations and APIs", icon: Plug, detail: "Connections to accounting, ERPs, carriers, payment providers and machinery through official APIs." },
     { name: "Data model and security", icon: ShieldCheck, detail: "A Supabase Postgres schema with row-level security, backups and audit logs." },
     { name: "Tests and documentation", icon: Code2, detail: "Automated tests, a written runbook and the code in your repository from day one." },
+  ],
+  flow: [
+    { name: "Blueprint", label: "Scope + fixed quote", icon: ClipboardList, color: "orange" },
+    { name: "Weekly demos", label: "On staging", icon: Layers, color: "purple" },
+    { name: "Tests and runbook", label: "Before go-live", icon: Code2, color: "green" },
+    { name: "Your repository", label: "Code + data yours", icon: ShieldCheck, color: "navy" },
   ],
   outcomes: [
     { metric: "Quote", target: "Fixed by the Blueprint" },

@@ -1,6 +1,7 @@
 // Product UI drawn in HTML, standing in for screenshots until real client systems can be shown.
 // Every name and number is illustrative; mocks are aria-hidden and their frames carry a caption.
 import { Check, FileText, Upload } from "lucide-react";
+import { MiniBars, StatusRing } from "./visuals";
 
 const label = "font-mono text-[10px] uppercase tracking-[0.08em] text-slate";
 
@@ -76,13 +77,16 @@ export function AppMock() {
             <p className="text-white">{text}</p>
           </div>
         ))}
-        <div className="mt-auto rounded-[8px] border border-navy-cell p-3">
-          <p className={label}>Throughput · 7 days</p>
-          <div className="mt-2 flex h-12 items-end gap-1.5">
-            {[38, 52, 46, 64, 58, 72, 84].map((h, i) => (
-              <span key={i} className={`flex-1 rounded-t-[2px] ${i === 6 ? "bg-orange" : "bg-navy-cell"}`} style={{ height: `${h}%` }} />
-            ))}
+        <div className="mt-auto flex items-center gap-3 rounded-[8px] border border-navy-cell p-3">
+          <StatusRing value={96} color="green" tone="dark" label="96%" size={52} />
+          <div>
+            <p className={label}>On time</p>
+            <p className="font-semibold text-white">14 of 15 jobs</p>
           </div>
+        </div>
+        <div className="rounded-[8px] border border-navy-cell p-3">
+          <p className={label}>Throughput · 7 days</p>
+          <MiniBars values={[38, 52, 46, 64, 58, 72, 84]} color="orange" tone="dark" className="mt-2 h-12" />
         </div>
       </aside>
     </div>
