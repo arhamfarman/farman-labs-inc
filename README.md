@@ -20,6 +20,27 @@ npm run check:brand  # fails on white-on-orange or any blue class
 | `app/contact/actions.ts` | Intake form server action: Zod, honeypot, Turnstile, Supabase insert, Resend emails |
 | `supabase/leads.sql` | Table for intake submissions |
 
+## Deploying to Cloudflare Workers
+
+The site runs on Cloudflare Workers through the [OpenNext](https://opennext.js.org/cloudflare) adapter (`wrangler.jsonc`, `open-next.config.ts`).
+
+```bash
+npm run preview   # build for Workers and run locally in workerd (http://localhost:8787)
+npm run deploy    # build and deploy from this machine (needs `npx wrangler login` once)
+```
+
+Git deploys use Workers Builds: **Workers & Pages → Create → Workers → Import a repository**, then:
+
+| Setting | Value |
+| --- | --- |
+| Worker name | `farman-labs-inc` (must match `name` in `wrangler.jsonc`) |
+| Build command | `npx opennextjs-cloudflare build` |
+| Deploy command | `npx opennextjs-cloudflare deploy` |
+| Non-production branch deploy command | `npx opennextjs-cloudflare upload` |
+| Root directory | `/` |
+
+Use the OpenNext deploy command, not plain `wrangler deploy`: it also uploads the prerendered pages that `/work/[slug]` is served from. Add `NEXT_PUBLIC_*` values as build variables and the server keys (Supabase, Resend, Turnstile) as runtime variables and secrets under the Worker's settings.
+
 ## Before launch
 
 - Copy `.env.example` to `.env.local` (and to Vercel) and fill in Supabase, Resend, Turnstile and the Cal.com link. Without them the form still validates and logs leads to the server console, and the booking tab shows email and phone.
