@@ -10,15 +10,15 @@ export function ClosingBand() {
         <div className="flex flex-col gap-6 md:col-span-7">
           <p className="path-line">// farman-labs / next-step</p>
           <h2 className="h-display text-white">
-            See what your operation
-            <span className="line-2">could run on.</span>
+            Tell us where
+            <span className="line-2">it hurts.</span>
           </h2>
           <Rail direction="horizontal" />
         </div>
         <div className="flex flex-col gap-4 md:col-span-5">
-          <p className="text-lead text-mist">Tell us where work gets re-typed, chased or lost. We&rsquo;ll show you the system that removes it.</p>
+          <p className="text-lead text-mist">Where does work get re-typed, chased or lost? In 30 minutes we&rsquo;ll show you what the fix looks like and roughly what it costs.</p>
           <EmailCapture fill secondary={<Button href="/contact?brief=blueprint" variant="secondary" size="lg">Start with a Blueprint</Button>} />
-          <p className="text-[14px] text-slate">A 30-minute call with the founder. No sales team, no obligation.</p>
+          <p className="text-[14px] text-slate">You talk to the person who would build it. No sales team, no obligation.</p>
         </div>
       </div>
     </section>

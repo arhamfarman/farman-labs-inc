@@ -16,6 +16,7 @@ export type Service = {
   path: string;
   icon: LucideIcon;
   tile: "orange" | "purple"; // icon colour on its tile; service icons alternate orange and purple
+  hook: string; // the problem, in the visitor's words; leads every card and section
   summary: string;
   promise: string;
   bullets: string[];
@@ -36,6 +37,7 @@ export const services: Service[] = [
     path: "// farman-labs / services / portals",
     icon: PanelsTopLeft,
     tile: "orange",
+    hook: "Customers keep calling to ask where their order is?",
     summary:
       "A branded, secure web portal where customers place and track orders and suppliers confirm and update them, so your team stops re-typing emails into spreadsheets.",
     promise: "Customers order and track online. Your team stops re-typing.",
@@ -75,6 +77,7 @@ export const services: Service[] = [
     path: "// farman-labs / services / automation",
     icon: Workflow,
     tile: "purple",
+    hook: "Still typing supplier invoices into QuickBooks?",
     summary:
       "Background systems that read the documents and emails your business already receives, pull out the data and put it where it belongs, with no copy-paste.",
     promise: "Invoices and emails become data automatically.",
@@ -114,6 +117,7 @@ export const services: Service[] = [
     path: "// farman-labs / services / dashboards",
     icon: LayoutDashboard,
     tile: "orange",
+    hook: "Walking the floor to find out what's late?",
     summary:
       "One live screen showing every job, crew and asset, updated the moment something changes, built around how your business actually runs instead of a generic ERP's idea of it.",
     promise: "Every job, crew and asset on one live screen.",
@@ -156,6 +160,7 @@ services.push({
   path: "// farman-labs / services / custom",
   icon: Code2,
   tile: "purple",
+  hook: "Software that only does 80% of the job?",
   summary:
     "Full-stack software engineered around one operation's unusual work: quoting engines, scheduling tools, scanners and internal apps that no off-the-shelf product handles.",
   promise: "The system your operation needs, when no product fits.",

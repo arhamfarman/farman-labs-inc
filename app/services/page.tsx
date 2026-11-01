@@ -42,9 +42,9 @@ export default function ServicesPage() {
     <>
       <Hero
         path="// farman-labs / services"
-        line1="Four systems."
-        line2="One operation."
-        lead="Start with the one that hurts most. They connect when you're ready."
+        line1="Pick your problem."
+        line2="We'll build the fix."
+        lead="Start with whatever costs your team the most time. Each system works on its own and connects to the others when you're ready."
         media={<ServiceTiles />}
       />
 
@@ -68,9 +68,12 @@ export default function ServicesPage() {
               <p className="path-line">{s.path}</p>
               <IconTile icon={s.icon} color={s.tile} marker={s.accent === "navy" ? undefined : s.accent} />
               <h2 className="text-[2rem] font-extrabold uppercase leading-[1.05] max-md:text-[1.75rem]">{s.name}</h2>
-              <p className="text-lead text-steel">{s.promise}</p>
+              <div className="flex flex-col gap-2">
+                <p className="text-h3 font-extrabold text-navy">{s.hook}</p>
+                <p className="text-lead text-steel">{s.promise}</p>
+              </div>
               <div>
-                <h3 className="mb-3 font-mono text-label uppercase text-steel">Before</h3>
+                <h3 className="mb-3 font-mono text-label uppercase text-steel">Sound familiar?</h3>
                 <SquareList items={s.pains.slice(0, 3)} className="text-[15px] text-steel" />
               </div>
             </div>
@@ -98,7 +101,7 @@ export default function ServicesPage() {
             ))}
           </ul>
 
-          <h3 className="mb-4 mt-16 font-mono text-label uppercase text-steel">What changes · targets</h3>
+          <h3 className="mb-4 mt-16 font-mono text-label uppercase text-steel">What changes for you · targets</h3>
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
             {s.outcomes.map((o, n) => (
               <MetricCard key={o.metric} label={o.metric} value={o.target} color={(["navy", "orange", "purple", "green"] as const)[n % 4]}>

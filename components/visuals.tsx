@@ -147,7 +147,8 @@ export function Pipeline({ stages, tone = "light", label, className = "" }: {
                 <p className={`font-mono text-label uppercase ${dark ? "text-slate" : "text-steel"}`}>{s.label}</p>
                 <p className={`text-[17px] font-bold ${dark ? "text-white" : "text-navy"}`}>{s.name}</p>
               </div>
-              {s.detail && <div className="mt-auto">{s.detail}</div>}
+              {/* Details sit at the bottom unless they grow themselves (flex-1) to fill the card */}
+              {s.detail && <div className="flex flex-1 flex-col justify-end">{s.detail}</div>}
             </div>
           </li>
           {i < stages.length - 1 && <Connector dark={dark} />}

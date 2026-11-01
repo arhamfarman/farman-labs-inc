@@ -1,23 +1,50 @@
 import type { Metadata } from "next";
 import Image from "next/image";
+import { CalendarCheck, Code2, Database, KeyRound, LifeBuoy, Lightbulb, Printer } from "lucide-react";
 import { Hero } from "@/components/hero";
 import { Button, TextLink } from "@/components/button";
 import { Rail } from "@/components/rail";
 import { LabelledCell, LabelledCellGroup } from "@/components/labelled-cell";
 import { Section, SectionHeading, SquareList } from "@/components/section";
+import { IconTile, Pipeline, type Stage } from "@/components/visuals";
 import { ClosingBand } from "@/components/closing-band";
 import { contact } from "@/lib/site";
+import { photos } from "@/lib/photos";
 
 export const metadata: Metadata = {
   title: "About",
-  description: "Farman Labs carries forward Farman Printing Press, a family business built on getting physical work done right.",
+  description: "Farman Labs grew out of a family printing press. We build the software that gives teams in physical operations their time back.",
 };
 
-const principles = [
-  { label: "Enter data once", text: "One source of truth, synced everywhere.", square: "bg-orange" },
-  { label: "Ship in weeks", text: "Small fixed scopes, in production fast.", square: "bg-purple" },
-  { label: "You own it", text: "Code, data and documentation are yours.", square: "bg-green" },
-  { label: "Boring on purpose", text: "Proven tools, monitored and documented.", square: "bg-orange" },
+const story: Stage[] = [
+  {
+    icon: Printer,
+    color: "orange",
+    label: "Where it started",
+    name: "A family printing press",
+    detail: <p className="text-[14px] text-steel">Orders, deadlines and paper, held together by memory and hard work.</p>,
+  },
+  {
+    icon: Lightbulb,
+    color: "purple",
+    label: "What it taught us",
+    name: "The people were never the problem",
+    detail: <p className="text-[14px] text-steel">The re-typing, chasing and guessing came from the systems around them.</p>,
+  },
+  {
+    icon: Code2,
+    color: "green",
+    label: "What we do now",
+    name: "Build the systems they deserve",
+    detail: <p className="text-[14px] text-steel">Portals, automations and live dashboards for operations like yours.</p>,
+  },
+];
+
+const forYou = [
+  { icon: Database, label: "Enter data once", text: "One source of truth, synced to every screen and to your books." },
+  { icon: CalendarCheck, label: "See progress weekly", text: "A working demo every Friday, not a status report." },
+  { icon: KeyRound, label: "Own everything", text: "Code, data and documentation are yours from day one." },
+  { icon: LifeBuoy, label: "It keeps working", text: "Proven tools, monitored and documented. Boring on purpose." },
 ];
 
 const blocks = [
@@ -31,9 +58,9 @@ export default function AboutPage() {
     <>
       <Hero
         path="// farman-labs / about"
-        line1="Built on"
+        line1="We come from"
         line2="a printing press."
-        lead="Farman Labs carries forward a family business built on getting physical work done right, and builds the software those businesses deserve."
+        lead="We know the phone calls, the late files and the whiteboard, because our family business ran on them. Now we build the software that gives that time back to teams like yours."
         actions={
           <>
             <Button href="/contact" size="lg">Book a discovery call</Button>
@@ -42,9 +69,9 @@ export default function AboutPage() {
         }
         cells={
           <LabelledCellGroup tone="dark" columns={3}>
-            <LabelledCell size="sm" label="Founded on" value="Farman Printing Press" accent="orange" />
-            <LabelledCell size="sm" label="Built for" value="Physical operations" accent="purple" />
-            <LabelledCell size="sm" label="Led by" value={contact.name} accent="green" />
+            <LabelledCell size="sm" label="Grew out of" value="Farman Printing Press" accent="orange" />
+            <LabelledCell size="sm" label="Built for" value="Teams like yours" accent="purple" />
+            <LabelledCell size="sm" label="You work with" value={contact.name} accent="green" />
           </LabelledCellGroup>
         }
         media={
@@ -68,22 +95,28 @@ export default function AboutPage() {
         }
       />
 
-      {/* Heritage and the mark, as a bento grid */}
+      {/* The story as three steps, then the heritage and the mark */}
       <Section surface="paper">
-        <SectionHeading path="// farman-labs / about / heritage" line1="Orders, deadlines" line2="and paper." />
-        <div className="mt-12 grid grid-cols-1 gap-4 lg:grid-cols-6">
-          <article className="flex flex-col gap-5 rounded-cell border border-hairline bg-white p-6 md:p-8 lg:col-span-4">
-            <p className="path-line">// farman-labs / about / story</p>
-            {/* Draft copy. Arham to write the final story. */}
-            <p className="text-lead text-steel">
-              Farman Printing Press was founded by my late father. It ran on orders, deadlines and paper: customers calling to
-              check on jobs, files arriving in the wrong format, and a lot of work held together by memory and hard effort.
-            </p>
-            <p className="text-lead text-steel">
-              Farman Labs builds the software those businesses deserve: portals, automations and live dashboards that let the
-              people doing physical work spend their time on the work.
-            </p>
-            <SquareList items={["Orders entered once, not re-typed", "Status visible without a phone call", "Systems the team owns and understands"]} className="mt-auto" />
+        <SectionHeading path="// farman-labs / about / why-we-do-this" line1="Why we" line2="do this." />
+        <Pipeline stages={story} label="How Farman Labs came to be" className="mt-12" />
+
+        <div className="mt-4 grid grid-cols-1 gap-4 lg:grid-cols-6">
+          <article className="flex flex-col overflow-hidden rounded-cell border border-hairline bg-white lg:col-span-4">
+            <figure className="relative h-56 md:h-64">
+              <Image src={photos.heritagePress.src} alt={photos.heritagePress.alt} fill sizes="(min-width: 1024px) 66vw, 100vw" className="object-cover" />
+              <figcaption className="absolute bottom-2 right-3 rounded-[6px] bg-navy/80 px-2 py-1 text-[11px] text-mist">
+                A press like the one it started on · <a href={photos.heritagePress.href} target="_blank" rel="noopener noreferrer" className="hover:underline">{photos.heritagePress.by} / Unsplash</a>
+              </figcaption>
+            </figure>
+            <div className="flex flex-1 flex-col gap-5 p-6 md:p-8">
+              <p className="path-line">// farman-labs / about / story</p>
+              {/* Draft copy. Arham to write the final story. */}
+              <p className="text-lead text-steel">
+                Farman Printing Press was founded by my late father. Customers called to check on jobs, files arrived in the wrong
+                format, and good people lost hours to work a system should have done. Farman Labs exists so your team doesn&rsquo;t have to.
+              </p>
+              <SquareList items={["Orders entered once, not re-typed", "Status visible without a phone call", "Systems your team owns and understands"]} className="mt-auto" />
+            </div>
           </article>
           <figure className="flex flex-col overflow-hidden rounded-cell border border-hairline bg-white lg:col-span-2">
             <div className="border-b border-hairline bg-paper px-5 py-3 font-mono text-label uppercase text-steel">Archive · the original mark</div>
@@ -118,23 +151,23 @@ export default function AboutPage() {
         </div>
       </Section>
 
-      {/* Engineering principles */}
+      {/* What that background means for the visitor */}
       <section className="surface-navy relative overflow-hidden">
         <Rail className="absolute inset-y-0 left-0" />
         <div className="mx-auto max-w-content px-6 py-[72px] md:py-28">
           <div className="flex flex-wrap items-end justify-between gap-6">
-            <SectionHeading dark path="// farman-labs / about / principles" line1="How we" line2="engineer." />
+            <SectionHeading dark path="// farman-labs / about / for-you" line1="What that" line2="means for you." />
             <TextLink href="/process">See the process</TextLink>
           </div>
           <ul className="mt-12 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
-            {principles.map((p, i) => (
+            {forYou.map((p, i) => (
               <li key={p.label} className="flex flex-col gap-4 rounded-cell border border-navy-cell bg-navy/70 p-6">
-                <div className="flex items-center justify-between">
-                  <span aria-hidden className={`h-3 w-3 ${p.square}`} />
+                <div className="flex items-start justify-between">
+                  <IconTile icon={p.icon} color={i % 2 === 0 ? "orange" : "purple"} marker={(["orange", "purple", "green", "orange"] as const)[i]} tone="dark" />
                   <span className="font-mono text-label text-slate">0{i + 1}</span>
                 </div>
                 <p className="font-mono text-label uppercase text-slate">{p.label}</p>
-                <p className="text-[20px] font-bold leading-snug text-white">{p.text}</p>
+                <p className="text-[18px] font-bold leading-snug text-white">{p.text}</p>
               </li>
             ))}
           </ul>
@@ -143,7 +176,7 @@ export default function AboutPage() {
 
       {/* Founder, laid out like the business card and a spec sheet */}
       <Section surface="white">
-        <SectionHeading path="// farman-labs / team" line1="Who builds" line2="your system." />
+        <SectionHeading path="// farman-labs / team" line1="Who you'll" line2="work with." />
         <article className="mt-12 grid grid-cols-1 overflow-hidden rounded-cell border border-hairline md:grid-cols-12">
           <div className="surface-navy relative flex aspect-[4/5] items-center justify-center md:col-span-4 md:aspect-auto md:min-h-[420px]">
             <Rail className="absolute inset-y-0 left-0" />
@@ -165,9 +198,10 @@ export default function AboutPage() {
               </div>
               {/* Draft bio. Arham to confirm. */}
               <p className="max-w-prose text-steel">
-                Arham designs and builds every Farman Labs system himself: client portals, automation pipelines and real-time
-                dashboards for businesses that move, make and store real things. You talk to the person writing the code.
+                You talk to the person who designs and writes your system. No account managers and no hand-offs: Arham
+                works through your process with your team, builds the system, and stays on to keep it running.
               </p>
+              <SquareList items={["Maps how work moves today, with the people doing it", "Designs and builds the system", "Stays on after launch"]} className="text-[15px]" />
               <LabelledCellGroup columns={3} className="mt-auto">
                 <LabelledCell size="sm" label="Email" value={contact.email} href={`mailto:${contact.email}`} />
                 <LabelledCell size="sm" label="Phone" value={contact.phone} href={contact.phoneHref} />
